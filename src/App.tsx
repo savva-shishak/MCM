@@ -149,7 +149,7 @@ export default function App() {
               .map((_, id) => (
                 <Tour
                   key={id}
-                  tour={buttles.filter((b) => b.tour === id)}
+                  tour={buttles.filter((b) => b.tour === id && commands[b.black] && commands[b.white])}
                   num={id + 1}
                   commands={commands}
                   onChange={(changedButtle) =>

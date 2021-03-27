@@ -60,9 +60,7 @@ export function Tour({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {tour.map(
-            (b) =>
-              commands[b.black] &&
-              commands[b.white] && (
+            (b) => (
                 <React.Fragment key={b.id}>
                   <ListItem>
                     <Box
