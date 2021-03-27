@@ -15,12 +15,12 @@ import {
 import { generateButtles } from "./generator-buttles";
 
 import { Buttle, Command } from "./types";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Add, Delete } from "@material-ui/icons";
 import { Tour } from "./components/Tour";
 import { Results } from "./components/Results";
 
-let idcount = 1;
+let idcount = +(sessionStorage.getItem("idcount") || 1);
 
 export default function App() {
   const [name, setName] = useState("");
@@ -40,6 +40,7 @@ export default function App() {
   const addCommand = () => {
     setCommands([...commands, { id: idcount++, name }]);
     setButtles([]);
+    sessionStorage.setItem("idcount", idcount + "");
     setName("");
   };
 
