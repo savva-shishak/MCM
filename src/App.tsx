@@ -7,7 +7,6 @@ import {
   TextField,
   Box,
   IconButton,
-  Tooltip,
   ListItemText,
   ListItemIcon,
   Typography
@@ -15,7 +14,7 @@ import {
 import { generateButtles } from "./generator-buttles";
 
 import { Buttle, Command } from "./types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Add, Delete } from "@material-ui/icons";
 import { Tour } from "./components/Tour";
 import { Results } from "./components/Results";
@@ -37,12 +36,12 @@ export default function App() {
     sessionStorage.setItem("buttles", JSON.stringify(buttles));
   }, [commands, buttles]);
 
-  const addCommand = () => {
+  const addCommand = useCallback(() => {
     setCommands([...commands, { id: idcount++, name }]);
     setButtles([]);
     sessionStorage.setItem("idcount", idcount + "");
     setName("");
-  };
+  }, [commands, setCommands, setButtles, setName, name]);
 
   const removeCommand = (id: number) => () => {
     setCommands(commands.filter((com) => com.id !== id));
@@ -72,7 +71,7 @@ export default function App() {
           <Typography variant="body1">Использование:</Typography>
           <Typography variant="body1">
             Сначала вам нужно составить список команд, записав название каждой
-            команды в текстовое поле справа и нажав на "+"
+            команды в текстовое поле справа и нажав на "+" или нажав на "Enter" на клавиатуре
           </Typography>
           <Box width="100%" height="20px" />
           <Typography variant="body1">
@@ -100,22 +99,22 @@ export default function App() {
           <Typography variant="body1">Приятного пользования!!!</Typography>
         </Box>
         <Box display="flex" flexDirection="column" alignItems="flex-end">
-          <Box display="flex" alignItems="center" width={300}>
-            <TextField
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              fullWidth
-              label="Введите название команды"
-            />
-            <Tooltip title="Добавить команду">
+          <form onSubmit={e => {e.preventDefault(); addCommand()}}>
+            <Box display="flex" alignItems="center" width={300}>
+              <TextField
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                label="Введите название команды"
+              />
               <IconButton
-                onClick={addCommand}
+                type="submit"
                 disabled={name.trim().length < 3}
               >
                 <Add />
               </IconButton>
-            </Tooltip>
-          </Box>
+            </Box>
+          </form>
           <Box width={300} height="100%" overflow="auto" marginBottom="15px">
             <List>
               {commands.map(({ id, name }) => (
